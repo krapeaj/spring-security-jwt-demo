@@ -19,6 +19,15 @@ public class Account {
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
 
+    public Account() {
+    }
+
+    public Account(String userId, String password, UserRole userRole) {
+        this.userId = userId;
+        this.password = password;
+        this.userRole = userRole;
+    }
+
     public long getId() {
         return id;
     }

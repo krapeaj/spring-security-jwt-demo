@@ -12,11 +12,11 @@ This is a Post- authorization token object, which is created after authorization
 
 public class PostAuthorizationToken extends UsernamePasswordAuthenticationToken {
 
-    private PostAuthorizationToken(String userId, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(userId, password, authorities);
+    private PostAuthorizationToken(AccountContext accountContext, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(accountContext, password, authorities);
     }
 
     public static PostAuthorizationToken fromAccountContext(AccountContext accountContext) {
-        return new PostAuthorizationToken(accountContext.getUsername(), accountContext.getPassword(), accountContext.getAuthorities());
+        return new PostAuthorizationToken(accountContext, accountContext.getPassword(), accountContext.getAuthorities());
     }
 }

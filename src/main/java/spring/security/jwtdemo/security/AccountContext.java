@@ -6,9 +6,7 @@ import org.springframework.security.core.userdetails.User;
 import spring.security.jwtdemo.domain.Account;
 import spring.security.jwtdemo.domain.UserRole;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -27,5 +25,9 @@ public class AccountContext extends User {
 
     private static List<SimpleGrantedAuthority> parseAuthorities(UserRole userRole) {
         return Arrays.asList(userRole).stream().map(r -> new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());
+    }
+
+    public String getAuthority() {
+        return getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().get();
     }
 }

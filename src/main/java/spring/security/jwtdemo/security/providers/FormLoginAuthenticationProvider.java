@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import spring.security.jwtdemo.domain.Account;
 import spring.security.jwtdemo.security.AccountContext;
 import spring.security.jwtdemo.security.AccountContextService;
@@ -12,6 +13,7 @@ import spring.security.jwtdemo.security.AuthenticationFailureException;
 import spring.security.jwtdemo.security.tokens.PostAuthorizationToken;
 import spring.security.jwtdemo.security.tokens.PreAuthorizationToken;
 
+@Component
 public class FormLoginAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
@@ -40,6 +42,6 @@ public class FormLoginAuthenticationProvider implements AuthenticationProvider {
     }
 
     private boolean isCorrectPassword(Account account, String password) {
-        return passwordEncoder.matches(account.getPassword(), password);
+        return passwordEncoder.matches(password, account.getPassword());
     }
 }

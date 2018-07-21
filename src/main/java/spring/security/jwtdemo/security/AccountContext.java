@@ -11,6 +11,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+This object is used in the context of security instead of the domain Account object.
+ */
+
 public class AccountContext extends User {
 
     private AccountContext(String username, String password, Collection<? extends GrantedAuthority> authorities) {

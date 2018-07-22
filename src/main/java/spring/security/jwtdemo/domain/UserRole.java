@@ -1,6 +1,8 @@
 package spring.security.jwtdemo.domain;
 
-public enum UserRole {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum UserRole implements GrantedAuthority {
 
     ADMIN("ROLE_ADMIN"), USER("ROLE_USER");
 
@@ -10,8 +12,8 @@ public enum UserRole {
         this.roleName = roleName;
     }
 
-
-    public String getRoleName() {
+    @Override
+    public String getAuthority() {
         return roleName;
     }
 }

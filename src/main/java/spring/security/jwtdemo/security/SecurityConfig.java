@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    @Bean // This would normally belong somewhere else.
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
@@ -49,25 +49,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    protected FormLoginFilter formLoginFilter() throws Exception {
+    private FormLoginFilter formLoginFilter() throws Exception {
         FormLoginFilter filter = new FormLoginFilter("/formLogin", formLoginAuthenticationSuccessHandler, formLoginAuthenticationFailuerHandler);
         filter.setAuthenticationManager(super.authenticationManagerBean());
 
         return filter;
     }
 
-    @Override // Add provider
+    @Override // Add provider.
     protected void configure(AuthenticationManagerBuilder auth) {
         auth
                 .authenticationProvider(provider);
     }
 
-    @Override // Add filter!
+    @Override // Add filter.
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Disable session usage
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Disable session usage.
                 .and()
-                .csrf().disable() //
+                .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
                 .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class); // add filter before spring's default initial filter.

@@ -2,13 +2,13 @@ package spring.security.jwtdemo.security.tokens;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class PreProcessJwt extends UsernamePasswordAuthenticationToken {
+public class PreProcessingJwt extends UsernamePasswordAuthenticationToken {
 
-    private PreProcessJwt(Object principal, Object credentials) {
+    private PreProcessingJwt(Object principal, Object credentials) {
         super(principal, credentials);
     }
 
-    public PreProcessJwt(String token) {
+    public PreProcessingJwt(String token) {
         this(token, token.length()); // ??
     }
 }

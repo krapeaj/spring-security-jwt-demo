@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import spring.security.jwtdemo.security.HeaderTokenExtractor;
 import spring.security.jwtdemo.security.handlers.JwtAuthenticationFailureHandler;
-import spring.security.jwtdemo.security.tokens.PreProcessJwt;
+import spring.security.jwtdemo.security.tokens.PreProcessingJwt;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         String tokenPayload = request.getHeader(AUTHORIZATION_HEADER);
-        PreProcessJwt jwt = new PreProcessJwt(extractor.extract(tokenPayload));
+        PreProcessingJwt jwt = new PreProcessingJwt(extractor.extract(tokenPayload));
 
         return super.getAuthenticationManager().authenticate(jwt);
     }

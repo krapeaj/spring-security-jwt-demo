@@ -20,7 +20,7 @@ public class FormLoginAuthenticationProvider implements AuthenticationProvider {
     private AccountContextService accountContextService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder; //TODO: why not make this a static method? - Util
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

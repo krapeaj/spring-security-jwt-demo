@@ -23,7 +23,7 @@ public class AccountContext extends User {
         return new AccountContext(account.getUserId(), account.getPassword(), parseAuthorities(account.getUserRole()));
     }
 
-    private static List<SimpleGrantedAuthority> parseAuthorities(UserRole userRole) {
+    private static List<SimpleGrantedAuthority> parseAuthorities(UserRole userRole) { //TODO: why not make UserRole implement GrantedAuthority?
         return Arrays.asList(userRole).stream().map(r -> new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());
     }
 

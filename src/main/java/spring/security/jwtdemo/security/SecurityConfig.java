@@ -15,13 +15,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import spring.security.jwtdemo.security.filters.FormLoginFilter;
+import spring.security.jwtdemo.security.filters.JwtAuthenticationFilter;
 import spring.security.jwtdemo.security.handlers.FormLoginAuthenticationFailuerHandler;
 import spring.security.jwtdemo.security.handlers.FormLoginAuthenticationSuccessHandler;
+import spring.security.jwtdemo.security.handlers.JwtAuthenticationFailureHandler;
 import spring.security.jwtdemo.security.providers.FormLoginAuthenticationProvider;
+import spring.security.jwtdemo.security.providers.JwtAuthenticationProvider;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true) // can use Spring AOP to authorize at method level
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -31,7 +36,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private FormLoginAuthenticationFailuerHandler formLoginAuthenticationFailuerHandler;
 
     @Autowired
-    private FormLoginAuthenticationProvider provider;
+    private FormLoginAuthenticationProvider formLoginAuthenticationProvider;
+
+    @Autowired
+    private JwtAuthenticationFailureHandler jwtAuthenticationFailureHandler;
+
+    @Autowired
+    private HeaderTokenExtractor extractor;
+
+    @Autowired
+    private JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,10 +70,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
+    @Bean
+    protected JwtAuthenticationFilter jwtFilter() throws Exception {
+        FilterSkipMatcher matcher = new FilterSkipMatcher(Arrays.asList("/formLogin"), "/api/**");
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(matcher, jwtAuthenticationFailureHandler, extractor);
+        filter.setAuthenticationManager(super.authenticationManagerBean());
+        return filter;
+    }
+
     @Override // Add provider.
     protected void configure(AuthenticationManagerBuilder auth) {
         auth
-                .authenticationProvider(provider);
+                .authenticationProvider(formLoginAuthenticationProvider)
+                .authenticationProvider(jwtAuthenticationProvider);
     }
 
     @Override // Add filter.
@@ -70,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class); // add filter before spring's default initial filter.
-
+                .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class) // add filter before spring's default initial filter.
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

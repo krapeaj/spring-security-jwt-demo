@@ -19,14 +19,14 @@ public class AccountContextService implements UserDetailsService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public Account findByUserId(String userId) {
-        return accountRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("아이디에 맞는 계정이 없습니다."));
-    }
-
     @Override
     public UserDetails loadUserByUsername(String userId) {
-        Account account = accountRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("아이디에 맞는 계정이 없습니다."));
+        Account account = findByUserId(userId);
         return convertToAccountContext(account);
+    }
+
+    private Account findByUserId(String userId) {
+        return accountRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("아이디에 맞는 계정이 없습니다."));
     }
 
     private AccountContext convertToAccountContext(Account account) {

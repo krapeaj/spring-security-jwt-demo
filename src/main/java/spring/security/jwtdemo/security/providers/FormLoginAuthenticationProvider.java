@@ -29,9 +29,9 @@ public class FormLoginAuthenticationProvider implements AuthenticationProvider {
         String password = token.getPassword();
 
         // Compare pre-authorization credentials (ie. userId & password) to that of actual in DB
-        Account account = accountContextService.findByUserId(userId);
-        if (isCorrectPassword(account, password)) {
-            return PostAuthorizationToken.fromAccountContext(AccountContext.fromAccountModel(account));
+        AccountContext accountContext = (AccountContext) accountContextService.loadUserByUsername(userId);
+        if (isCorrectPassword(accountContext, password)) {
+            return PostAuthorizationToken.fromAccountContext(accountContext);
         }
         throw new AuthenticationFailureException("사용자 인증에 실패했습니다.");
     }
@@ -41,7 +41,7 @@ public class FormLoginAuthenticationProvider implements AuthenticationProvider {
         return PreAuthorizationToken.class.isAssignableFrom(authentication);
     }
 
-    private boolean isCorrectPassword(Account account, String password) {
+    private boolean isCorrectPassword(AccountContext account, String password) {
         return passwordEncoder.matches(password, account.getPassword());
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import spring.security.jwtdemo.dto.TokenDto;
 import spring.security.jwtdemo.security.AccountContext;
-import spring.security.jwtdemo.security.JwtFactory;
+import spring.security.jwtdemo.security.JwtUtils;
 import spring.security.jwtdemo.security.tokens.PostAuthorizationToken;
 
 import javax.servlet.ServletException;
@@ -25,16 +25,14 @@ This object handles authentication success.
 public class FormLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
-    private JwtFactory jwtFactory;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     @Override // writes JWT value as a DTO on response.
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         PostAuthorizationToken token = (PostAuthorizationToken) authentication;
-        AccountContext accountContext = (AccountContext) token.getPrincipal();
-        String tokenString = jwtFactory.generateToken(accountContext);
+
+        AccountContext accountContext = token.getAccountContext();
+        String tokenString = JwtUtils.generateToken(accountContext);
 
         processResponse(response, convertToDto(tokenString));
     }

@@ -9,6 +9,10 @@ public class PreProcessingJwt extends UsernamePasswordAuthenticationToken {
     }
 
     public PreProcessingJwt(String token) {
-        this(token, token.length()); // ??
+        this(token, token.length()); // shouldn't credentials be something of more significance?
+    }
+
+    public String getTokenString() {
+        return (String) super.getPrincipal();
     }
 }

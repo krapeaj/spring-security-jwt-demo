@@ -26,10 +26,6 @@ public class FormLoginFilter extends AbstractAuthenticationProcessingFilter {
         this.failureHandler = failureHandler;
     }
 
-    protected FormLoginFilter(String defaultFilterProcessesUrl) {
-        super(defaultFilterProcessesUrl);
-    }
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         FormLoginDto formLoginDto = new ObjectMapper().readValue(request.getReader(), FormLoginDto.class);

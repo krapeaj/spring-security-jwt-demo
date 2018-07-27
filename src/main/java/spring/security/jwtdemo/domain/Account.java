@@ -28,6 +28,11 @@ public class Account {
         this.userRole = userRole;
     }
 
+    public Account(String userId, long socialId) {
+        this.userId = userId;
+        this.socialId = socialId;
+    }
+
     public long getId() {
         return id;
     }
